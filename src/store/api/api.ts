@@ -13,7 +13,7 @@ export const pokemonApi = createApi({
     }),
     getPokemons: builder.query<Pokemons, number>({
       query: (page = 1) =>
-        `/pokemon?offset=${page === 1 ? 0 : page * 15}&limit=15`,
+        `/pokemon?offset=${page === 1 ? 0 : (page - 1) * 15}&limit=15`,
       keepUnusedDataFor: 1200,
     }),
     getPokemonSpeciesByName: builder.query<SpeciesResponse, string>({

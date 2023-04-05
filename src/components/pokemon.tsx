@@ -1,21 +1,23 @@
 import { useGetPokemonByNameQuery } from "@/store/api/api";
-import { Pokemon } from "@/store/api/types";
+import { setActivePokemon } from "@/store/slices/activePokemonSlice";
+import { useAppDispatch } from "@/store/store";
 import { getColorFromType } from "@/utils/get-color-from-type";
 import Image from "next/image";
 import React from "react";
+import { AiOutlineFieldNumber } from "react-icons/ai";
 
 type PokemonProps = {
   name: string;
-  setActivePokemon: (pokemon: Pokemon) => void;
 };
 
-const Pokemon = ({ name, setActivePokemon }: PokemonProps) => {
+const Pokemon = ({ name }: PokemonProps) => {
   const { data, isLoading } = useGetPokemonByNameQuery(name);
+  const dispatch = useAppDispatch();
 
   const setPokemon = () => {
     if (!data) return;
 
-    setActivePokemon(data);
+    dispatch(setActivePokemon(data));
   };
 
   return (
@@ -26,7 +28,7 @@ const Pokemon = ({ name, setActivePokemon }: PokemonProps) => {
       {isLoading && <div>Loading...</div>}
       {data && (
         <div className="flex flex-col items-center justify-center">
-          <div className="flex h-[70px] w-[70px] items-center justify-center ">
+          <div className=" flex h-[70px] w-[70px] items-center justify-center md:h-[40px] md:w-[40px]">
             <Image
               alt={data.name}
               src={
@@ -38,12 +40,18 @@ const Pokemon = ({ name, setActivePokemon }: PokemonProps) => {
               className="absolute top-[-30px]"
             />
           </div>
-          <div className="text-xl font-bold capitalize">{data.name}</div>
-          <div className="mt-4 flex">
+          <div className="text-md flex items-center font-bold text-slate-500 md:text-sm ">
+            <AiOutlineFieldNumber size={18} />
+            <div>{data.id}</div>
+          </div>
+          <div className="text-xl font-bold capitalize md:text-lg">
+            {data.name}
+          </div>
+          <div className=" flex">
             {data.types.map((type) => (
               <div
                 style={{ backgroundColor: getColorFromType(type.type.name) }}
-                className={` mr-2 rounded-md  p-2 font-bold capitalize `}
+                className={`mr-2 rounded-md p-2 font-bold capitalize md:text-sm `}
                 key={type.type.name}
               >
                 {type.type.name}
