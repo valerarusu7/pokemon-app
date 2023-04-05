@@ -35,7 +35,7 @@ const Header = () => {
           value={search}
           onChange={(e) => dispatch(setSearch(e.target.value))}
           onKeyDown={(e) => {
-            if (e.key === "Enter") {
+            if (e.key === "Enter" && search.length > 0) {
               searchPokemon();
             }
           }}

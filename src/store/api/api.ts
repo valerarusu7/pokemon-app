@@ -1,5 +1,10 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
-import { type Pokemon, type Pokemons, type SpeciesResponse } from "./types";
+import {
+  type EvolutionResponse,
+  type Pokemon,
+  type Pokemons,
+  type SpeciesResponse,
+} from "./types";
 
 export const pokemonApi = createApi({
   reducerPath: "pokemonApi",
@@ -18,10 +23,15 @@ export const pokemonApi = createApi({
       query: (name) => `/pokemon-species/${name}`,
       keepUnusedDataFor: 1200,
     }),
+    getEvolutionChainById: builder.query<EvolutionResponse, string>({
+      query: (id) => `/evolution-chain/${id}`,
+      keepUnusedDataFor: 1200,
+    }),
   }),
 });
 export const {
   useGetPokemonByNameQuery,
   useGetPokemonsQuery,
   useGetPokemonSpeciesByNameQuery,
+  useGetEvolutionChainByIdQuery,
 } = pokemonApi;

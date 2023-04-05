@@ -10,8 +10,48 @@ type InitialPokemon = {
   url: string;
 };
 
+interface NamedAPIResource<T> {
+  name: string;
+  url: string;
+}
+
+export type EvolutionResponse = {
+  id: number;
+  chain: ChainLink;
+};
+
+interface ChainLink {
+  is_baby: boolean;
+  species: NamedAPIResource<Pokemon>;
+  evolution_details: EvolutionDetail[];
+  evolves_to: ChainLink[];
+}
+
+interface EvolutionTrigger {
+  id: number;
+  name: string;
+}
+
+interface EvolutionDetail {
+  trigger: NamedAPIResource<EvolutionTrigger>;
+  gender: number | null;
+  known_move: NamedAPIResource<Move> | null;
+  known_move_type: NamedAPIResource<Type> | null;
+  location: NamedAPIResource<Location> | null;
+  min_level: number | null;
+  min_happiness: number | null;
+  min_beauty: number | null;
+  min_affection: number | null;
+  needs_overworld_rain: boolean;
+  party_type: NamedAPIResource<Type> | null;
+  relative_physical_stats: number | null;
+  time_of_day: string;
+  turn_upside_down: boolean;
+}
+
 export type SpeciesResponse = {
   evolution_chain: EvolutionChain;
+  flavor_text_entries: [{ flavor_text: string }];
 };
 
 export type EvolutionChain = {

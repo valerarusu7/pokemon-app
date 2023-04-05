@@ -9,6 +9,8 @@ import { EyeSlashIcon } from "@heroicons/react/20/solid";
 import Image from "next/image";
 import React, { useEffect, useState } from "react";
 import { GiMale, GiFemale } from "react-icons/gi";
+import EvolutionChain from "./evolution-chain";
+import { useGetPokemonSpeciesByNameQuery } from "@/store/api/api";
 
 type Response = {
   damage_relations: {
@@ -25,6 +27,21 @@ const ActivePokemon = () => {
   const [weaknesses, setWeakneasses] = useState<string[]>([]);
   const { activePokemon } = useAppSelector(activeSelector);
   const { pokemon } = useAppSelector(searchSelector);
+  const { data: speciesData } = useGetPokemonSpeciesByNameQuery(
+    activePokemon.name
+  );
+  const pokedexEntry = speciesData?.flavor_text_entries[0].flavor_text
+    .replace("\f", "\n")
+    .replace("\u00ad\n", "")
+    .replace("\u00ad", "")
+    .replace(" -\n", " - ")
+    .replace("-\n", "-")
+    .replace("\n", " ");
+
+  const evolutionChainId = speciesData?.evolution_chain.url
+    .split("/")
+    .slice(-2, -1)[0];
+
   const dispatch = useAppDispatch();
 
   useEffect(() => {
@@ -87,6 +104,12 @@ const ActivePokemon = () => {
               {type.type.name}
             </div>
           ))}
+        </div>
+        <div className="mt-6 text-center ">
+          <h1 className="text-md font-bold uppercase">Pokedéx entry</h1>
+          <div className="flex h-[80px] items-center justify-center text-center">
+            {pokedexEntry?.trim()}
+          </div>
         </div>
         <div className="mt-4 flex w-full flex-col items-center">
           <div className="text-md font-bold uppercase">Abilities</div>
@@ -196,6 +219,13 @@ const ActivePokemon = () => {
                 </div>
               </div>
             </div>
+          </div>
+
+          <div className="mt-8 flex flex-col items-center justify-center">
+            <div className="text-md mb-8 font-bold uppercase">Evolution</div>
+            {evolutionChainId && (
+              <EvolutionChain evolutionChainId={evolutionChainId} />
+            )}
           </div>
         </div>
       </div>
