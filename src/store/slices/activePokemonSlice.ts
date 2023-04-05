@@ -1,6 +1,6 @@
 import { createSlice, type PayloadAction } from "@reduxjs/toolkit";
 import { type Pokemon } from "../api/types";
-import { initialPokemon } from "initial-pokemon";
+import { initialPokemon } from "@/data/initial-pokemon";
 
 type InitialState = {
   activePokemon: Pokemon;

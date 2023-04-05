@@ -5,6 +5,7 @@ import { getColorFromType } from "@/utils/get-color-from-type";
 import Image from "next/image";
 import React from "react";
 import { AiOutlineFieldNumber } from "react-icons/ai";
+import Loading from "./loading";
 
 type PokemonProps = {
   name: string;
@@ -25,7 +26,11 @@ const Pokemon = ({ name }: PokemonProps) => {
       onClick={setPokemon}
       className="relative flex transform select-none items-center justify-center rounded-xl border  border-slate-100 bg-white shadow-sm duration-300 hover:cursor-pointer hover:shadow-lg active:scale-90"
     >
-      {isLoading && <div>Loading...</div>}
+      {isLoading && (
+        <div>
+          <Loading />
+        </div>
+      )}
       {data && (
         <div className="flex flex-col items-center justify-center">
           <div className=" flex h-[70px] w-[70px] items-center justify-center md:h-[40px] md:w-[40px]">

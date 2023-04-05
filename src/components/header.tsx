@@ -11,10 +11,8 @@ import {
 import { getPokemonByName } from "@/store/thunks/get-pokemon-by-name";
 
 const Header = () => {
-  const { search, pokemon } = useAppSelector(searchSelector);
+  const { search } = useAppSelector(searchSelector);
   const dispatch = useAppDispatch();
-
-  console.log(pokemon);
 
   useEffect(() => {
     if (search.length === 0) {
@@ -22,6 +20,10 @@ const Header = () => {
       dispatch(setSearchError(null));
     }
   }, [dispatch, search]);
+
+  const searchPokemon = () => {
+    void dispatch(getPokemonByName(search));
+  };
 
   return (
     <header className="flex w-full select-none gap-4">
@@ -32,9 +34,15 @@ const Header = () => {
           className="mr-2 grow pl-4 outline-none"
           value={search}
           onChange={(e) => dispatch(setSearch(e.target.value))}
+          onKeyDown={(e) => {
+            if (e.key === "Enter") {
+              searchPokemon();
+            }
+          }}
         />
         <button
-          onClick={() => void dispatch(getPokemonByName(search))}
+          disabled={search.length === 0}
+          onClick={searchPokemon}
           className="group transform rounded-xl bg-[#e56449] p-3 shadow-lg shadow-red-500 transition-transform hover:opacity-75 active:scale-75"
         >
           <Image

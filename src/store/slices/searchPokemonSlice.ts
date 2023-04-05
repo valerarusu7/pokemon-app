@@ -6,12 +6,14 @@ type InitialState = {
   search: string;
   pokemon: Pokemon | null;
   searchError: string | null;
+  isSearching: boolean;
 };
 
 const initialState: InitialState = {
   search: "",
   pokemon: null,
   searchError: null,
+  isSearching: false,
 };
 
 export const searchPokemonSlice = createSlice({
@@ -30,13 +32,18 @@ export const searchPokemonSlice = createSlice({
     },
   },
   extraReducers: (builder) => {
+    builder.addCase(getPokemonByName.pending, (state) => {
+      state.isSearching = true;
+    });
     builder.addCase(getPokemonByName.fulfilled, (state, action) => {
       state.pokemon = action.payload;
       state.searchError = null;
+      state.isSearching = false;
     });
     builder.addCase(getPokemonByName.rejected, (state) => {
       state.searchError = "Pokemon not found";
       state.pokemon = null;
+      state.isSearching = false;
     });
   },
 });

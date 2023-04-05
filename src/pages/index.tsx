@@ -8,13 +8,12 @@ import Head from "next/head";
 import ActivePokemon from "@/components/active-pokemon";
 import { useAppSelector } from "@/store/store";
 import { searchSelector } from "@/store/selector/searchSelector";
-import { activeSelector } from "@/store/selector/activeSelector";
+import Loading from "@/components/loading";
 
 const Home: NextPage = () => {
   const [page, setPage] = useState(1);
-  const { pokemon, searchError } = useAppSelector(searchSelector);
-  const { activePokemon } = useAppSelector(activeSelector);
-  const { data } = useGetPokemonsQuery(page);
+  const { pokemon, searchError, isSearching } = useAppSelector(searchSelector);
+  const { data, isFetching } = useGetPokemonsQuery(page);
 
   return (
     <>
@@ -33,26 +32,40 @@ const Home: NextPage = () => {
               </div>
 
               <div className="grid grid-cols-1 ">
-                <ActivePokemon pokemon={activePokemon} />
+                <ActivePokemon />
               </div>
             </section>
           )}
 
-          {!pokemon && !searchError && (
-            <section className="mb-2 mt-10 flex grow gap-4">
-              <div className="grid grow grid-cols-3 grid-rows-5 gap-x-4 gap-y-10">
-                {data?.results.map((pokemon, index) => (
-                  <Pokemon key={index} name={pokemon.name} />
-                ))}
-              </div>
-
-              <div className="grid grid-cols-1 ">
-                <ActivePokemon pokemon={activePokemon} />
-              </div>
-            </section>
+          {isSearching && (
+            <div className="items-center justify-center text-center text-2xl font-extrabold text-slate-600">
+              Searching...
+            </div>
           )}
 
-          {searchError && (
+          {!pokemon && !searchError && !isSearching && (
+            <>
+              {isFetching ? (
+                <section className="flex grow items-center justify-center">
+                  <Loading />
+                </section>
+              ) : (
+                <section className="mb-2 mt-10 flex grow gap-4">
+                  <div className="grid grow grid-cols-3 grid-rows-5 gap-x-4 gap-y-10">
+                    {data?.results.map((pokemon, index) => (
+                      <Pokemon key={index} name={pokemon.name} />
+                    ))}
+                  </div>
+
+                  <div className="grid grid-cols-1 ">
+                    <ActivePokemon />
+                  </div>
+                </section>
+              )}
+            </>
+          )}
+
+          {searchError && !isSearching && (
             <div className="items-center justify-center text-center text-2xl font-extrabold text-slate-600">
               {searchError}
             </div>

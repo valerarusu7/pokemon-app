@@ -1,15 +1,14 @@
 import { stats } from "@/data/stats";
 import { images } from "@/data/type-images";
-import { type Pokemon } from "@/store/api/types";
+import { activeSelector } from "@/store/selector/activeSelector";
+import { searchSelector } from "@/store/selector/searchSelector";
+import { setActivePokemon } from "@/store/slices/activePokemonSlice";
+import { useAppDispatch, useAppSelector } from "@/store/store";
 import { getColorFromType } from "@/utils/get-color-from-type";
 import { EyeSlashIcon } from "@heroicons/react/20/solid";
 import Image from "next/image";
 import React, { useEffect, useState } from "react";
 import { GiMale, GiFemale } from "react-icons/gi";
-
-type ActivePokemonProps = {
-  pokemon: Pokemon;
-};
 
 type Response = {
   damage_relations: {
@@ -21,12 +20,20 @@ type Response = {
     }[];
   };
 };
-const ActivePokemon = ({ pokemon }: ActivePokemonProps) => {
+
+const ActivePokemon = () => {
   const [weaknesses, setWeakneasses] = useState<string[]>([]);
+  const { activePokemon } = useAppSelector(activeSelector);
+  const { pokemon } = useAppSelector(searchSelector);
+  const dispatch = useAppDispatch();
+
+  useEffect(() => {
+    if (pokemon) dispatch(setActivePokemon(pokemon));
+  }, [dispatch, pokemon]);
 
   useEffect(() => {
     const newWeaknesses: string[] = [];
-    pokemon.types.map((type) => {
+    activePokemon.types.map((type) => {
       fetch(`https://pokeapi.co/api/v2/type/${type.type.name}`)
         .then((res) => res.json())
         .then((data: Response) => {
@@ -38,14 +45,14 @@ const ActivePokemon = ({ pokemon }: ActivePokemonProps) => {
           setWeakneasses(newWeaknesses);
         });
     });
-  }, [pokemon]);
+  }, [activePokemon]);
 
   return (
     <div className="relative flex w-[400px] select-none flex-col items-center rounded-xl border border-slate-100 bg-white px-4 shadow-sm">
       <div className="flex h-[200px] w-[200px] items-center justify-center">
         <Image
-          alt={pokemon.name}
-          src={pokemon.sprites.other?.dream_world.front_default as string}
+          alt={activePokemon.name}
+          src={activePokemon.sprites.other?.dream_world.front_default as string}
           height={100}
           width={100}
           className=" mt-4  object-contain"
@@ -63,11 +70,13 @@ const ActivePokemon = ({ pokemon }: ActivePokemonProps) => {
 
       <div className="flex w-full flex-col items-center">
         <div className="text-lg font-extrabold capitalize text-slate-500">
-          #{pokemon.id}
+          #{activePokemon.id}
         </div>
-        <div className="text-2xl font-bold capitalize">{pokemon.name}</div>
+        <div className="text-2xl font-bold capitalize">
+          {activePokemon.name}
+        </div>
         <div className="mt-2 flex">
-          {pokemon.types.map((type) => (
+          {activePokemon.types.map((type) => (
             <div
               style={{
                 backgroundColor: getColorFromType(type.type.name),
@@ -82,13 +91,15 @@ const ActivePokemon = ({ pokemon }: ActivePokemonProps) => {
         <div className="mt-4 flex w-full flex-col items-center">
           <div className="text-md font-bold uppercase">Abilities</div>
           <div className="mt-2 grid w-full grid-cols-2 items-center justify-between gap-4">
-            {pokemon.abilities.map((ability, index) => (
+            {activePokemon.abilities.map((ability, index) => (
               <div
                 style={{
                   borderColor: ability.is_hidden
                     ? "#F56565"
                     : getColorFromType(
-                        pokemon.types[0] ? pokemon.types[0].type.name : "normal"
+                        activePokemon.types[0]
+                          ? activePokemon.types[0].type.name
+                          : "normal"
                       ),
                 }}
                 key={index}
@@ -111,7 +122,7 @@ const ActivePokemon = ({ pokemon }: ActivePokemonProps) => {
               </div>
               <div className="flex grow items-center justify-center gap-2 rounded-full  bg-slate-100 px-4 py-2 font-bold capitalize">
                 <div className="flex items-center justify-center">
-                  {pokemon.height}m
+                  {activePokemon.height}m
                 </div>
               </div>
             </div>
@@ -121,7 +132,7 @@ const ActivePokemon = ({ pokemon }: ActivePokemonProps) => {
               </div>
               <div className="flex grow items-center justify-center gap-2 rounded-full  bg-slate-100 px-4 py-2 font-bold capitalize">
                 <div className="flex items-center justify-center">
-                  {pokemon.weight}kg
+                  {activePokemon.weight}kg
                 </div>
               </div>
             </div>
@@ -151,7 +162,7 @@ const ActivePokemon = ({ pokemon }: ActivePokemonProps) => {
               </div>
               <div className="flex grow items-center justify-center gap-2 rounded-full  bg-slate-100 px-4 py-2 font-bold capitalize">
                 <div className="flex items-center justify-center">
-                  {pokemon.base_experience}
+                  {activePokemon.base_experience}
                 </div>
               </div>
             </div>
@@ -160,7 +171,7 @@ const ActivePokemon = ({ pokemon }: ActivePokemonProps) => {
           <div className="mt-4 flex flex-col items-center">
             <div className="text-md font-bold uppercase">Stats</div>
             <div className="flex gap-1">
-              {pokemon.stats.map((stat, index) => (
+              {activePokemon.stats.map((stat, index) => (
                 <div
                   key={index}
                   className="flex flex-col items-center rounded-full bg-slate-100 p-1"
@@ -181,7 +192,7 @@ const ActivePokemon = ({ pokemon }: ActivePokemonProps) => {
                   TOT
                 </div>
                 <div className="py-1 text-sm font-bold">
-                  {pokemon.stats.reduce((a, b) => a + b.base_stat, 0)}
+                  {activePokemon.stats.reduce((a, b) => a + b.base_stat, 0)}
                 </div>
               </div>
             </div>
