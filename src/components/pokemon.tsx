@@ -24,7 +24,7 @@ const Pokemon = ({ name }: PokemonProps) => {
   return (
     <div
       onClick={setPokemon}
-      className="relative flex transform select-none items-center justify-center rounded-xl border  border-slate-100 bg-white shadow-sm duration-300 hover:cursor-pointer hover:shadow-lg active:scale-90"
+      className="relative flex transform select-none items-center justify-center rounded-xl border border-slate-100 bg-white p-1 shadow-sm duration-300 hover:cursor-pointer hover:shadow-lg active:scale-90"
     >
       {isLoading && (
         <div>
@@ -33,7 +33,7 @@ const Pokemon = ({ name }: PokemonProps) => {
       )}
       {data && (
         <div className="flex flex-col items-center justify-center">
-          <div className=" flex h-[70px] w-[70px] items-center justify-center md:h-[40px] md:w-[40px]">
+          <div className="flex h-[40px] w-[40px] items-center justify-center sm:w-[40px] lg:h-[70px] lg:w-[70px]">
             <Image
               alt={data.name}
               src={
@@ -49,14 +49,14 @@ const Pokemon = ({ name }: PokemonProps) => {
             <AiOutlineFieldNumber size={18} />
             <div>{data.id}</div>
           </div>
-          <div className="text-xl font-bold capitalize md:text-lg">
+          <div className="mb-1 text-sm font-bold capitalize sm:text-lg">
             {data.name}
           </div>
           <div className=" flex">
             {data.types.map((type) => (
               <div
                 style={{ backgroundColor: getColorFromType(type.type.name) }}
-                className={`mr-2 rounded-md p-2 font-bold capitalize md:text-sm `}
+                className={`mr-2 rounded-md p-2 text-xs font-bold capitalize sm:text-sm`}
                 key={type.type.name}
               >
                 {type.type.name}

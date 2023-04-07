@@ -27,7 +27,7 @@ const Header = () => {
 
   return (
     <header className="flex w-full select-none gap-4">
-      <div className="flex grow  rounded-xl border border-slate-100 bg-white p-2 shadow-sm">
+      <div className="flex grow rounded-xl border border-slate-100 bg-white p-2 shadow-sm">
         <input
           placeholder="Search your Pokémon!"
           type="text"
@@ -46,7 +46,7 @@ const Header = () => {
           className="group transform rounded-xl bg-[#e56449] p-3 shadow-lg shadow-red-500 transition-transform hover:opacity-75 active:scale-75"
         >
           <Image
-            className="group-hover:animate-spin"
+            className="h-[20px] w-[20px] group-hover:animate-spin sm:w-[30px] sm:h-[30px]"
             src={pokeball}
             alt="Search"
             width={30}
@@ -54,9 +54,6 @@ const Header = () => {
           />
         </button>
       </div>
-      <button className="flex transform items-center rounded-xl bg-red-500/80 px-12 py-4 text-2xl font-bold text-white shadow-lg transition-transform hover:opacity-75 active:scale-75">
-        <div>Battle</div>
-      </button>
     </header>
   );
 };

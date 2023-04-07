@@ -28,9 +28,12 @@ const EvolutionChain = ({ evolutionChainId }: { evolutionChainId: string }) => {
   };
 
   return (
-    <div className="flex items-center">
+    <div className="flex items-center sm:block sm:gap-4 lg:flex">
       {getPokemonEvolution().map((pokemon, index) => (
-        <div key={index} className="flex items-center">
+        <div
+          key={index}
+          className="flex items-center sm:block sm:gap-4 lg:flex"
+        >
           {(pokemon.level && (
             <div className="flex rounded-full border border-slate-50 bg-slate-100 px-2 py-1 text-sm font-bold text-gray-400">
               <div className="mr-1">Lvl</div>

@@ -65,7 +65,7 @@ const ActivePokemon = () => {
   }, [activePokemon]);
 
   return (
-    <div className="relative flex w-[400px] select-none flex-col items-center rounded-xl border border-slate-100 bg-white px-4 shadow-sm">
+    <div className="relative flex w-[400px] select-none flex-col items-center rounded-xl border border-slate-100 bg-white px-4 shadow-sm sm:w-[300px] lg:w-[400px]">
       <div className="flex h-[200px] w-[200px] items-center justify-center">
         <Image
           alt={activePokemon.name}
@@ -113,7 +113,7 @@ const ActivePokemon = () => {
         </div>
         <div className="mt-4 flex w-full flex-col items-center">
           <div className="text-md font-bold uppercase">Abilities</div>
-          <div className="mt-2 grid w-full grid-cols-2 items-center justify-between gap-4">
+          <div className="mt-2 grid w-full grid-cols-2 items-center justify-between gap-4 sm:grid-cols-1 lg:grid-cols-2">
             {activePokemon.abilities.map((ability, index) => (
               <div
                 style={{
@@ -138,7 +138,7 @@ const ActivePokemon = () => {
         </div>
 
         <div className="w-full">
-          <div className="mt-4 grid grid-cols-2 gap-4">
+          <div className="mt-4 grid grid-cols-2 gap-4 sm:grid-cols-1  xl:grid-cols-2">
             <div className="flex flex-col">
               <div className="text-md mb-2 flex items-center justify-center font-bold uppercase">
                 Height
@@ -160,14 +160,14 @@ const ActivePokemon = () => {
               </div>
             </div>
           </div>
-          <div className="mt-4 grid grid-cols-2 gap-4">
+          <div className="mt-4 grid grid-cols-2 gap-4 sm:grid-cols-1 xl:grid-cols-2">
             <div className="flex flex-col">
               <div className="text-md mb-2 flex items-center justify-center font-bold uppercase">
                 Weaknesses
               </div>
               <div className="flex grow items-center justify-center gap-2 rounded-full  bg-slate-100 px-4 py-2 font-bold capitalize">
                 <div className="flex items-center justify-center gap-1">
-                  {weaknesses.map((weakness, index) => (
+                  {weaknesses.slice(0, 4).map((weakness, index) => (
                     <Image
                       key={index}
                       alt={weakness}
@@ -197,24 +197,26 @@ const ActivePokemon = () => {
               {activePokemon.stats.map((stat, index) => (
                 <div
                   key={index}
-                  className="flex flex-col items-center rounded-full bg-slate-100 p-1"
+                  className="flex flex-col items-center rounded-full bg-slate-100 p-1 sm:p-[0.5px]"
                 >
                   <div
                     style={{
                       backgroundColor: stats.get(stat.stat.name)?.color,
                     }}
-                    className="flex h-8 w-8 items-center justify-center rounded-full p-2 text-sm font-bold text-white"
+                    className="flex h-8 w-8 items-center justify-center rounded-full p-2 text-sm font-bold text-white sm:p-1 sm:text-xs"
                   >
                     {stats.get(stat.stat.name)?.name}
                   </div>
-                  <div className="py-1 text-sm font-bold">{stat.base_stat}</div>
+                  <div className="py-1 text-sm font-bold sm:text-xs">
+                    {stat.base_stat}
+                  </div>
                 </div>
               ))}
               <div className="flex flex-col items-center rounded-full bg-slate-100 p-1">
-                <div className="flex h-8 w-8 items-center justify-center rounded-full bg-[#8093dc] p-1 text-xs font-bold text-white">
+                <div className="flex h-8 w-8 items-center justify-center rounded-full bg-[#8093dc] p-2 text-sm font-bold text-white sm:p-1 sm:text-xs ">
                   TOT
                 </div>
-                <div className="py-1 text-sm font-bold">
+                <div className="py-1 text-sm font-bold sm:text-xs">
                   {activePokemon.stats.reduce((a, b) => a + b.base_stat, 0)}
                 </div>
               </div>
@@ -222,7 +224,7 @@ const ActivePokemon = () => {
           </div>
 
           <div className="mt-8 flex flex-col items-center justify-center">
-            <div className="text-md mb-8 font-bold uppercase">Evolution</div>
+            <div className="text-md mb-4 font-bold uppercase">Evolution</div>
             {evolutionChainId && (
               <EvolutionChain evolutionChainId={evolutionChainId} />
             )}
