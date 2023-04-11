@@ -41,7 +41,7 @@ const EvolutionChain = ({ evolutionChainId }: { evolutionChainId: string }) => {
             </div>
           )) ||
             (pokemon.trigger && (
-              <div className="mx-4 rounded-full border border-slate-50 bg-slate-100 px-2 py-1 text-xs font-bold text-gray-400">
+              <div className="rounded-full border border-slate-50 bg-slate-100 px-2 py-1 text-xs font-bold text-gray-400">
                 <div>Evolves</div>
               </div>
             ))}
